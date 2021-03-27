@@ -11,7 +11,7 @@ LuaSerialize
         Hashmap map[interface{}]interface{}
     }
     ____________________________
-    |   golang <---------> lua  |
+    |  golang <---------> lua   |
     |___________________________|
     宏观
        interface{}   <---> TValue
@@ -66,22 +66,38 @@ Table间映射关系
    序列化算法采用云风的skynet框架中snlua服务间rpc通信使用的序列化算法:
    https://github.com/cloudwu/lua-serialize
    
-    整个算法库(c版本和go版本)做了如下调整:
-    1.实现了go版本, 该版本移除了指针类型的支持(单个go进程内部rpc一般不需要序列化, 而go和lua间rpc一般跨进程, 没必要传递指针)
-    2.修改了c版本, 整个算法库约定按[大端序]序列化和反序列化>=2字节的整形和浮点型(skynet使用的序列化算法没做统一约定, 不同端序的物理机间rpc会有问题)
+Tips
+----
+    1. 整个算法库分为基于原c库修改后c版本和独立实现的go版本2部分
+    2. go版本的number类型只支持int64,float64两种, 移除了对应c版本的lightusrdata类型(单个go进程内部rpc一般不需要序列化, 而go和lua间rpc一般跨进程, 没必要传递指针)
+    3. 整个算法库约定按[大端序]序列化和反序列化>=2字节的整形和浮点型(skynet使用的原版本c库没做统一约定, 不同端序的物理机间rpc会有问题)
 
 单元测试
 ----
     go版本:  go test -v
-    lua版本: lua lua/seri_test.lua (先执行make -C lua/ 编译lseri.so)
+    clua版本: lua lua/seri_test.lua (先执行make -C lua/ 编译lseri.so)
 
 rpc测试示例
 ----
     cd example
     make
-    ./server/main.exe
-    lua client/main.lua
+    ./server/main.exe     #run server
+    lua client/main.lua   #run client
 
-性能测试
+性能测试(go版本)
 ----
-    待补充...
+    go test -bench=.
+
+性能报告(go版本)
+----
+    测试环境:
+      AMD EPYC 7K62 CPU @ 2595MHz
+      cpu逻辑核数: 1核
+    测试数据:
+      BenchmarkLuaSeri    	  126991	      9604 ns/op
+      BenchmarkJson       	   40058	     29801 ns/op
+      LuaSeri pkg len:260
+      Json    pkg len:349
+    测试结论:
+      LuaSeri压解包性能约为Json 3倍
+      LuaSeri压缩包体大小约为Json 75%
