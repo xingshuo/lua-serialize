@@ -1,4 +1,6 @@
 -- 需要在当前文件夹下先执行make生成lseri.so
+package.cpath = package.cpath .. ";lua/?.so"
+
 local lseri = require "lseri"
 
 function check_args(...)
