@@ -433,7 +433,6 @@ get_integer(lua_State *L, struct read_block *rb, int cookie) {
 		uint16_t * pn = rb_read(rb,sizeof(n));
 		if (pn == NULL)
 			invalid_stream(L,rb);
-		//memcpy(&n, pn, sizeof(n));
 		n = cast_bigendian_u16(*pn);
 		return n;
 	}
@@ -442,7 +441,6 @@ get_integer(lua_State *L, struct read_block *rb, int cookie) {
 		int32_t * pn = rb_read(rb,sizeof(n));
 		if (pn == NULL)
 			invalid_stream(L,rb);
-		//memcpy(&n, pn, sizeof(n));
 		n = cast_bigendian_u32(*pn);
 		return n;
 	}
@@ -451,7 +449,6 @@ get_integer(lua_State *L, struct read_block *rb, int cookie) {
 		int64_t * pn = rb_read(rb,sizeof(n));
 		if (pn == NULL)
 			invalid_stream(L,rb);
-		//memcpy(&n, pn, sizeof(n));
 		n = cast_bigendian_u64(*pn);
 		return n;
 	}
@@ -467,7 +464,6 @@ get_real(lua_State *L, struct read_block *rb) {
 	int64_t * pn = rb_read(rb,sizeof(mf.f));
 	if (pn == NULL)
 		invalid_stream(L,rb);
-	//memcpy(&n, pn, sizeof(n));
 
 	mf.i = cast_bigendian_u64(*pn);
 	return mf.f;
@@ -557,7 +553,6 @@ push_value(lua_State *L, struct read_block *rb, int type, int cookie) {
 				invalid_stream(L,rb);
 			}
 			uint16_t n = cast_bigendian_u16(*plen);
-			// memcpy(&n, plen, sizeof(n));
 			get_buffer(L,rb,n);
 		} else {
 			if (cookie != 4) {
@@ -568,7 +563,6 @@ push_value(lua_State *L, struct read_block *rb, int type, int cookie) {
 				invalid_stream(L,rb);
 			}
 			uint32_t n = cast_bigendian_u32(*plen);
-			// memcpy(&n, plen, sizeof(n));
 			get_buffer(L,rb,n);
 		}
 		break;

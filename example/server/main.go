@@ -75,6 +75,7 @@ func OnQueryItem(args ...interface{}) []interface{} {
 			"Gold":    999.99,
 		},
 	}
+	log.Printf("reply items by token %s\n%+v\n", token, items)
 	return []interface{}{true, items, nil, token}
 }
 
@@ -111,7 +112,6 @@ func handleRpc(stream []byte, conn net.Conn) {
 	if n != len(body)+HeadLen {
 		panic(fmt.Sprintf("conn write len err, %d != %d", n, len(body)+HeadLen))
 	}
-	log.Printf("reply items by token %s\n%+v\n", replys[3].(string), replys[1].(*lua_seri.Table))
 }
 
 func handleConn(conn net.Conn) {
