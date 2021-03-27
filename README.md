@@ -68,8 +68,8 @@ Table间映射关系
    
 Tips
 ----
-    1. 整个算法库分为基于原c库修改后c版本和独立实现的go版本2部分
-    2. go版本的number类型只支持int64,float64两种, 移除了对应c版本的lightusrdata类型(单个go进程内部rpc一般不需要序列化, 而go和lua间rpc一般跨进程, 没必要传递指针)
+    1. 整个算法库分为基于原c库修改后clua版本和独立实现的go版本2部分
+    2. go版本的number类型只支持int64,float64两种, 移除了对应clua版本的lightusrdata类型(单个go进程内部rpc一般不需要序列化, 而go和lua间rpc一般跨进程, 没必要传递指针)
     3. 整个算法库约定按[大端序]序列化和反序列化>=2字节的整形和浮点型(skynet使用的原版本c库没做统一约定, 不同端序的物理机间rpc会有问题)
 
 单元测试
@@ -77,7 +77,7 @@ Tips
     go版本:  go test -v
     clua版本: lua lua/seri_test.lua (先执行make -C lua/ 编译lseri.so)
 
-rpc测试示例
+rpc测试示例(clua call-> go)
 ----
     cd example
     make
