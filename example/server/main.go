@@ -155,7 +155,7 @@ func main() {
 	flag.Parse()
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
-		panic(fmt.Sprintf("socket accpet err:%v", err))
+		panic(fmt.Sprintf("socket listen err:%v", err))
 	}
 	log.Printf("listen %s ok!\n", addr)
 	for {
